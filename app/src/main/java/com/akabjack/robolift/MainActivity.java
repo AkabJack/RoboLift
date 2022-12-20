@@ -5,11 +5,13 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,58 +19,91 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+
 import java.util.ArrayList;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-    private ListView btListView;
-    private static final long SCAN_PERIOD = 1000;//scanam 10 secunde!
-    private boolean scanning;
-    private Handler handler = new Handler();
-    private BluetoothManager btManager;
+
     private BluetoothAdapter btAdapter;
-    private BluetoothLeScanner btLeScanner;
+    ArrayList<ScanResult> rezultate = new ArrayList<>();
+    boolean statusBLeDevice = true;
+
+    protected void onDestroy(){
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btListView = findViewById(R.id.listBTDev);
-        BluetoothManager btManager = getSystemService(BluetoothManager.class);
-        BluetoothAdapter btAdapter = btManager.getAdapter();
-        BluetoothLeScanner btLeScanner = btAdapter.getBluetoothLeScanner();
+        final ListView afisaj = findViewById(R.id.listBTDev);
+
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (btAdapter == null) {
-            Toast.makeText(this, "Nu este suportat BT", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nu suporta Bluetooth", Toast.LENGTH_SHORT).show();
         }
+        if (!btAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBtIntent);
 
-        //Set<BluetoothDevice> btConectate = btAdapter.getBondedDevices();//TODO plm mai am de lucru
-//
-        //ArrayList<String> btConectateString = new ArrayList<String>();
-        //for (BluetoothDevice device : btConectate) {
-        //    btConectateString.add(device.getName() + " " + device.getAddress());//TODO plm mai am de lucru si aci!
-        //}
-        //
-        //ArrayAdapter<String> btListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, btConectateString); //adapter pt afisarea dev BT
-        //btListView.setAdapter(btListAdapter);
-
-    }
-    private ScanCallback scanLeDevice(){//TODO VERIFICA PERMISIUNILE UTILIZATORULUI
-        ScanCallback leScanCallBack;
-        if(!scanning){
-            //Oprim scanarea
-            handler.postDelayed(new Runnable() {
+            final BroadcastReceiver mReceiver = new BroadcastReceiver() {
                 @Override
-                public void run() {scanning = false; btLeScanner.stopScan(leScanCallBack);}
-            }, SCAN_PERIOD);
-            scanning = true;
-            btLeScanner.startScan(leScanCallback);
+                public void onReceive(Context context, Intent intent) {
+                    final String action = intent.getAction();
+
+                    if (action == null && action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
+                        //TODO Maybe nullPointerException, try catch
+                    final int state = enableBtIntent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                    switch (state){
+                        case BluetoothAdapter.STATE_OFF:
+                            Toast.makeText(context, "BT is off", Toast.LENGTH_SHORT).show();
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_OFF:
+                            Toast.makeText(context, "BT is turning off", Toast.LENGTH_SHORT).show();
+                            break;
+                        case BluetoothAdapter.STATE_ON:
+                            Toast.makeText(context, "BT is on", Toast.LENGTH_SHORT).show();
+                            break;
+                        case BluetoothAdapter.STATE_TURNING_ON:
+                            Toast.makeText(context, "BT is turning on", Toast.LENGTH_SHORT).show();
+                            break;}
+                    }
+                }
+            };
+
+            IntentFilter enableBtIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            registerReceiver(mReceiver, enableBtIntentFilter);
+
+            BluetoothLeScanner blScan = btAdapter.getBluetoothLeScanner();
+            ScanCallback callBack = new ScanCallback() {
+                @Override
+                public void onScanResult(int callbackType, ScanResult result) {
+                    super.onScanResult(callbackType, result);
+                    rezultate.add(result);
+                }
+            };
+
+            if(statusBLeDevice){
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        blScan.startScan(callBack);//TODO add Tread
+                    }
+                }, 10000);
+                statusBLeDevice = false;
+                blScan.stopScan((callBack));
+            }
+            ArrayList<String>conversieRezultate = new ArrayList<String>();
+            for (ScanResult rez : rezultate){
+                conversieRezultate.add(rez.getDevice().getName()+ " " +  rez.getDevice().getAddress());
+            }
+            ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, conversieRezultate);
+            afisaj.setAdapter(listAdapter);
         }
-        else{
-            scanning = false;
-            btLeScanner.stopScan((leScanCallBack));
-        }
-        return leScanCallBack;
     }
+
 }
 
