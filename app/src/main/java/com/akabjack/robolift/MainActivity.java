@@ -15,21 +15,38 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    private BluetoothLeScanner blScan;
     private BluetoothAdapter btAdapter;
+    ScanCallback callBack;
     ArrayList<ScanResult> rezultate = new ArrayList<>();
-    boolean statusBLeDevice = true;
-
     protected void onDestroy(){
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.btnSearch){
+            Toast.makeText(this, "Button Search Pressed", Toast.LENGTH_SHORT).show();
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                blScan.startScan(callBack);//TODO add Tread
+            }, 100);
+            blScan.stopScan((callBack));
+
+        }
+        else if(view.getId() == R.id.btnJos){
+            Toast.makeText(this, "Button Down Pressed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -38,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final ListView afisaj = findViewById(R.id.listBTDev);
+        Button btnSearch = findViewById(R.id.btnSearch);
+        Button btnControlJos = findViewById(R.id.btnJos);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (btAdapter == null) {
@@ -52,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onReceive(Context context, Intent intent) {
                     final String action = intent.getAction();
 
-                    if (action == null && action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
+                    if (action == null || action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
                         //TODO Maybe nullPointerException, try catch
                     final int state = enableBtIntent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                     switch (state){
@@ -75,8 +94,10 @@ public class MainActivity extends AppCompatActivity {
             IntentFilter enableBtIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
             registerReceiver(mReceiver, enableBtIntentFilter);
 
-            BluetoothLeScanner blScan = btAdapter.getBluetoothLeScanner();
-            ScanCallback callBack = new ScanCallback() {
+            btnSearch.setOnClickListener(this);
+            btnControlJos.setOnClickListener(this);
+            blScan = btAdapter.getBluetoothLeScanner();
+            callBack = new ScanCallback() {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
@@ -84,25 +105,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-            if(statusBLeDevice){
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        blScan.startScan(callBack);//TODO add Tread
-                    }
-                }, 10000);
-                statusBLeDevice = false;
-                blScan.stopScan((callBack));
-            }
             ArrayList<String>conversieRezultate = new ArrayList<String>();
             for (ScanResult rez : rezultate){
                 conversieRezultate.add(rez.getDevice().getName()+ " " +  rez.getDevice().getAddress());
             }
             ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, conversieRezultate);
             afisaj.setAdapter(listAdapter);
+
         }
+
+
     }
 
 }
