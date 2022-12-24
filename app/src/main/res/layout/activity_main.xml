@@ -16,7 +16,7 @@
     <Button
         android:id="@+id/btnSus"
         android:layout_width="54dp"
-        android:layout_height="41dp"
+        android:layout_height="48dp"
         android:text="↑"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -25,29 +25,42 @@
     <Button
         android:id="@+id/btnDreapta"
         android:layout_width="54dp"
-        android:layout_height="41dp"
+        android:layout_height="48dp"
         android:text="→"
         app:layout_constraintBottom_toTopOf="@+id/btnJos"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toEndOf="@+id/btnJos" />
+        app:layout_constraintStart_toEndOf="@+id/btnJos"
+        app:layout_constraintTop_toBottomOf="@+id/btnSus" />
 
     <Button
         android:id="@+id/btnStanga"
         android:layout_width="54dp"
-        android:layout_height="41dp"
+        android:layout_height="48dp"
         android:text="←"
         app:layout_constraintBottom_toTopOf="@+id/btnJos"
         app:layout_constraintEnd_toStartOf="@+id/btnJos"
-        app:layout_constraintStart_toStartOf="@+id/guideline2" />
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/btnSus" />
 
     <Button
         android:id="@+id/btnJos"
         android:layout_width="54dp"
-        android:layout_height="41dp"
+        android:layout_height="48dp"
         android:text="↓"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:fontFamily="sans-serif-condensed-light"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline5"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -75,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.64" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
@@ -93,11 +106,12 @@
 
     <ListView
         android:id="@+id/listBTDev"
-        android:layout_width="332dp"
-        android:layout_height="213dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        android:layout_width="215dp"
+        android:layout_height="324dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
