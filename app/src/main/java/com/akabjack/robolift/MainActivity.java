@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             while(System.currentTimeMillis() < endTime){
                 if(!isScanning){
                     btConnection.getBlScan().startScan(btConnection.getCallBack());//TODO Beautify
+
                     isScanning = true;
                 }
             }
