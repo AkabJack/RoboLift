@@ -6,6 +6,10 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             while(System.currentTimeMillis() < endTime){
                 if(!isScanning){
                     btConnection.getBlScan().startScan(btConnection.getCallBack());//TODO Beautify
-
                     isScanning = true;
                 }
             }
@@ -51,48 +54,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnSearch = findViewById(R.id.btnSearch);
         Button btnControlJos = findViewById(R.id.btnJos);
         afisaj = findViewById(R.id.listBTDev);
-        btConnection.setBtAdapter();//nullPointter
-        btConnection.setCallBack(new ScanCallback()  {
-            @Override
-            public void onScanResult(int callbackType, ScanResult result) {
+
+        Toast.makeText(MainActivity.this, "App Init", Toast.LENGTH_SHORT).show();
+        btConnection = new BluetoothLeDevice();
+        btConnection.setBluetoothManager((BluetoothManager) getSystemService(BLUETOOTH_SERVICE)); //TODO Study this
+        btConnection.setBtAdapter(this);//nullPointter
+        btConnection.setCallBack(new ScanCallback() {
+            @Override public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
                 BluetoothDevice device = result.getDevice();
                 String deviceName = device.getName();
                 btConnection.DevicesNames.add(deviceName);
-            }});
+            }
+        });
+        BluetoothAdapter btAdapter = btConnection.getBtAdapter();//TODO repair this
 
-        Toast.makeText(MainActivity.this, "App Init", Toast.LENGTH_SHORT).show();
-        //TODO repair this
-        //if (!btAdapter.isEnabled()) {
-            //Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            //startActivity(enableBtIntent);
-
-            //final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-            //    @Override
-            //    public void onReceive(Context context, Intent intent) {
-            //        final String action = intent.getAction();
-            //        if (action == null || action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
-            //            //TODO Maybe nullPointerException, try catch
-            //        final int state = enableBtIntent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-            //        switch (state){
-            //            case BluetoothAdapter.STATE_OFF:
-            //                Toast.makeText(context, "BT is off", Toast.LENGTH_SHORT).show();
-            //                break;
-            //            case BluetoothAdapter.STATE_TURNING_OFF:
-            //                Toast.makeText(context, "BT is turning off", Toast.LENGTH_SHORT).show();
-            //                break;
-            //            case BluetoothAdapter.STATE_ON:
-            //                Toast.makeText(context, "BT is on", Toast.LENGTH_SHORT).show();
-            //                break;
-            //            case BluetoothAdapter.STATE_TURNING_ON:
-            //                Toast.makeText(context, "BT is turning on", Toast.LENGTH_SHORT).show();
-            //                break;
-            //        }
-            //        }
-            //    }
-            //};
-            //IntentFilter enableBtIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            //registerReceiver(mReceiver, enableBtIntentFilter);
+        if (!btAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBtIntent);
+            final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+                @Override public void onReceive(Context context, Intent intent) {
+                    final String action = intent.getAction();
+                    if (action == null || action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                        //TODO Maybe nullPointerException, try catch
+                        final int state = enableBtIntent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                        switch (state) {
+                            case BluetoothAdapter.STATE_OFF:
+                                Toast.makeText(context, "BT is off", Toast.LENGTH_SHORT).show();
+                                break;
+                            case BluetoothAdapter.STATE_TURNING_OFF:
+                                Toast.makeText(context, "BT is turning off", Toast.LENGTH_SHORT).show();
+                                break;
+                            case BluetoothAdapter.STATE_ON:
+                                Toast.makeText(context, "BT is on", Toast.LENGTH_SHORT).show();
+                                break;
+                            case BluetoothAdapter.STATE_TURNING_ON:
+                                Toast.makeText(context, "BT is turning on", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                }
+            };
+            IntentFilter enableBtIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            registerReceiver(mReceiver, enableBtIntentFilter);
+        }
             Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
 
             btConnection.setBlScan();
@@ -103,6 +108,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             afisaj.setAdapter(listAdapter);
 
         }
-
-
-    };
+    }
