@@ -16,7 +16,7 @@ import androidx.core.app.ActivityCompat;
 public class Utils {
 
     public static boolean checkBluetooth(BluetoothAdapter btAdapter) {
-        if(btAdapter == null || !btAdapter.isEnabled()){
+        if(btAdapter == null || btAdapter.isEnabled()){
             return false;
         }
         else return true;

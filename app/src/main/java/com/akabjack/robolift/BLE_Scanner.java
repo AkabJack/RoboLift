@@ -37,7 +37,7 @@ public class BLE_Scanner {
         }
     }
     public void stop(){
-        scanLeDevice(true);
+        scanLeDevice(false);
     }
 
     public void scanLeDevice(final boolean enable){
@@ -56,6 +56,10 @@ public class BLE_Scanner {
             btScanning = true;
             btAdapter.startLeScan(btScanCallBack);
         }
+        else{
+            btScanning = false;
+            btAdapter.stopLeScan(btScanCallBack);
+        }
     }
     private BluetoothAdapter.LeScanCallback btScanCallBack = new BluetoothAdapter.LeScanCallback() {
         @Override public void onLeScan(final BluetoothDevice bluetoothDevice, int rssi, byte[] bytes) {
@@ -66,7 +70,6 @@ public class BLE_Scanner {
                     @Override
                     public void run() {
                         mainActivity.addDevice(bluetoothDevice, new_rssi);
-
                     }
                 });
             }
