@@ -104,7 +104,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="30dp" />
 
-    <ListView
+    <ScrollView
         android:id="@+id/listBTDev"
         android:layout_width="215dp"
         android:layout_height="324dp"
