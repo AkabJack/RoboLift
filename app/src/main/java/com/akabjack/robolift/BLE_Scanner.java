@@ -53,7 +53,7 @@ public class BLE_Scanner {
                 @Override public void run() {
                     Utils.toast(mainActivity.getApplicationContext(), "Stopping BLE scan");
                     btScanning = false;
-                    bleScanner.stopScan((ScanCallback) btScanCallBack);//TODO replace the code with BluetoothLeScanner class
+                    bleScanner.stopScan((ScanCallback) btScanCallBack);
                     mainActivity.stopScan();
                 }
             }, scanPeriod);
