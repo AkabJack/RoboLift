@@ -25,18 +25,20 @@ public class Utils {
     public static void requestUserBluetooth(Activity activity) {//TODO Be carefull
         Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) {
                 ActivityCompat.requestPermissions((Activity) activity, new String[]{
                                 Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                                Manifest.permission.BLUETOOTH_CONNECT,
-                                Manifest.permission.BLUETOOTH_SCAN},
+                                Manifest.permission.ACCESS_COARSE_LOCATION},
                         2);
             }
             else{
                 ActivityCompat.requestPermissions((Activity) activity, new String[]{
+                                Manifest.permission.BLUETOOTH_CONNECT,
+                                Manifest.permission.BLUETOOTH_ADVERTISE,
                                 Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION,},
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.BLUETOOTH_CONNECT,
+                                Manifest.permission.BLUETOOTH_SCAN},
                         2);
             }
         }

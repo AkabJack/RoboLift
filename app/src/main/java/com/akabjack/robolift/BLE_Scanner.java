@@ -8,6 +8,9 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.os.Handler;
+import android.os.ParcelUuid;
+
+import java.util.List;
 
 public class BLE_Scanner {
     private MainActivity mainActivity;
@@ -17,6 +20,7 @@ public class BLE_Scanner {
     private long scanPeriod;
     private int signalStrenght;
     private BluetoothLeScanner bleScanner;
+    private List<ParcelUuid> uuids;
     public BLE_Scanner(MainActivity mainActivity, long scanPeriod, int signalStrenght){
         this.mainActivity = mainActivity;
         btHandler = new Handler();
@@ -79,6 +83,7 @@ public class BLE_Scanner {
                     }
                 });
             }
+            uuids = result.getScanRecord().getServiceUuids(); //
         }
     };
 }

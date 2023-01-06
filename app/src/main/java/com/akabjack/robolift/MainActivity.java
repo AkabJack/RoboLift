@@ -1,22 +1,35 @@
 package com.akabjack.robolift;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.ParcelUuid;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     public static final int REQUEST_ENABLE_BT = 1;
     public static final String TAG = MainActivity.class.getSimpleName();
     private HashMap<String, BLE_Device> btDevHashMap;
@@ -24,7 +37,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BLE_DevListAdapter adapter;
     private BtBroadcastReceiver btStateUpdateReceiver;
     private BLE_Scanner ble_scanner;
-    ScrollView afisaj;
+    private ScrollView afisaj;
+    TextView txtServ;
+    TextView txtChar;
+    TextView txtStatusCon;
+    private BLE_Connection robotConnection;
+    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        //https://developer.android.com/training/basics/intents/result#java
+        @Override public void onActivityResult(ActivityResult result) {
+            if(result.getResultCode() == Activity.RESULT_OK && result.getData() != null){
+                Intent intent = result.getData();
+                txtServ.setText((String) intent.getStringExtra("selectedServiceUUID"));
+                txtChar.setText((String) intent.getStringExtra("selectedCharacUUID"));
+                getRobotConnection().setSelectedServiceUUID(ParcelUuid.fromString((String) intent.getStringExtra("selectedServiceUUID")));
+                getRobotConnection().setSelectedCharacUUID(ParcelUuid.fromString((String) intent.getStringExtra("selectedCharacUUID")));
+            }
+        }
+    });
 
     @Override
     public void onClick(View view) {
@@ -32,8 +61,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(!ble_scanner.isScanning()){startScan();}
             else{stopScan();}
         }
+        else if(view.getId() == R.id.btnServiceSelect){
+            Intent intent = new Intent(MainActivity.this, listOfServices.class);
+            intent.putExtra("BLEConnection", robotConnection);
+            launcher.launch(intent);
+        }
+        else if(view.getId() == R.id.btnConnRetrieve){
+            robotConnection.connectGatt(MainActivity.this, true);
+            txtStatusCon.setText(robotConnection.isConectedCast());
+        }
         else if (view.getId() == R.id.btnJos) {
             Toast.makeText(this, "Button Down Pressed", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -59,13 +98,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ListView listView = new ListView(this);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
         ((ScrollView) findViewById(R.id.listBTDev)).addView(listView);
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                robotConnection = new BLE_Connection(btDevArrayList.get(position).getBtDevice());
+            }
+        });
+        txtServ = (TextView) findViewById(R.id.txtServ);
+        txtChar = (TextView) findViewById(R.id.txtChar);
+        txtStatusCon = (TextView) findViewById(R.id.txtStatusCon);
+        txtStatusCon.setText("Nu este conectat");
         Button btnSearch = findViewById(R.id.btnSearch);
         Button btnControlJos = findViewById(R.id.btnJos);
+        Button btnServiceSelect = findViewById(R.id.btnServiceSelect);
+        Button btnConnRetrieve = findViewById(R.id.btnConnRetrieve);
         findViewById(R.id.btnJos).setOnClickListener(this);
         findViewById(R.id.btnSearch).setOnClickListener(this);
+        findViewById(R.id.btnServiceSelect).setOnClickListener(this);
+        findViewById(R.id.btnConnRetrieve).setOnClickListener(this);
         }
 
         @Override protected void onStart(){
@@ -89,16 +140,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(requestCode == REQUEST_ENABLE_BT){
                 //MAKE SURE THE REQUEST WAS SUCCESSFUL
                 if(resultCode == RESULT_OK){
-                    //sup!
+                    if (getIntent().getExtras() != null){
+                        BLE_Connection dummy =  (BLE_Connection) getIntent().getSerializableExtra("BLEConnection");
+                        robotConnection.setSelectedCharacUUID(dummy.getSelectedCharacUUID());
+                        robotConnection.setSelectedServiceUUID(dummy.getSelectedServiceUUID());
+                    }
                 }
                 else if (resultCode == RESULT_CANCELED){
                     Utils.toast(getApplicationContext(), "Va rugam porniti Bluetooth");
                 }
             }
         }
-        @Override public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        //TODO Implement this
-    }
 
     public void addDevice(BluetoothDevice deviceAdded, int rssi){
         String macAddress = deviceAdded.getAddress();
@@ -128,5 +180,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Utils.toast(this,"Scanning stopped");
 
         ble_scanner.stop();
+    }
+
+    public BLE_Connection getRobotConnection() {
+        return robotConnection;
     }
 }

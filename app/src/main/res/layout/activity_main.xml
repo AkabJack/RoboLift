@@ -55,12 +55,37 @@
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
         android:fontFamily="sans-serif-condensed-light"
+        android:text="Search"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline5"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnServiceSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="Service"
+        app:layout_constraintEnd_toEndOf="@+id/btnSearch"
+        app:layout_constraintStart_toStartOf="@+id/btnSearch"
+        app:layout_constraintTop_toBottomOf="@+id/btnSearch"
+        app:layout_constraintVertical_bias="0.0"/>
+
+    <Button
+        android:id="@+id/btnConnRetrieve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="12sp"
+        android:text="Connect"
+        app:layout_constraintEnd_toEndOf="@+id/btnServiceSelect"
+        app:layout_constraintStart_toStartOf="@+id/btnServiceSelect"
+        app:layout_constraintTop_toBottomOf="@+id/btnServiceSelect"
+        app:layout_constraintVertical_bias="0.0"/>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -112,6 +137,65 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Serviciul selectat:"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline9"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:id="@+id/txtServ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nu a fost selectat nici un serviciu"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Caracteristica selectata:"
+        app:layout_constraintEnd_toEndOf="@+id/txtServ"
+        app:layout_constraintStart_toStartOf="@+id/txtServ"
+        app:layout_constraintTop_toBottomOf="@+id/txtServ" />
+
+    <TextView
+        android:id="@+id/txtChar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Nu a fost selectata nici o caracteristica"
+        app:layout_constraintEnd_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Status conectiune:"
+        app:layout_constraintStart_toStartOf="@+id/txtChar"
+        app:layout_constraintTop_toBottomOf="@+id/txtChar" />
+
+    <TextView
+        android:id="@+id/txtStatusCon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="null"
+        app:layout_constraintEnd_toEndOf="@+id/txtChar"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/txtChar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

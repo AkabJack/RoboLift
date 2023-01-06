@@ -13,4 +13,8 @@ public class BLE_Device {
     public void setRssi(int rssi) {this.rssi = rssi;}
     public String getName(){return btDevice.getName();} //TODO Ask Permission
     public String getAddress(){return btDevice.getAddress();}
+
+    public BluetoothDevice getBtDevice() {
+        return btDevice;
+    }
 }
