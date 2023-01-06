@@ -80,6 +80,7 @@ public class listOfServices extends AppCompatActivity implements View.OnClickLis
                 dataTran.putExtra("selectedServiceUUID", selectedServiceUUID.toString());
                 dataTran.putExtra("selectedCharacUUID", selectedCharacUUID.toString());
                 setResult(RESULT_OK, dataTran);
+                robotConnection.disconnectGatt();
                 finish();
             }
         });

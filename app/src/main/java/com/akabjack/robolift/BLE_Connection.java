@@ -13,6 +13,8 @@ import android.os.ParcelUuid;
 import android.os.Parcelable;
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -81,6 +83,7 @@ public class BLE_Connection implements Parcelable {
 
     public void connectGatt(Context context, boolean autoConnect){
         btDevGatt = btDevice.connectGatt(context, autoConnect, gattInitialCallback);
+        if(services == null) {btDevGatt.discoverServices();}
         isConnected = true;
     }
     public void disconnectGatt(){
@@ -91,7 +94,7 @@ public class BLE_Connection implements Parcelable {
 
     public BluetoothGattService getService(UUID uuid) {
         for (BluetoothGattService serv : services) {
-            if (serv.getUuid() == uuid) {
+            if (serv.getUuid().toString().equals(uuid.toString())) {
                 setSelectedServ(serv);
                 return serv;
             }
@@ -109,7 +112,7 @@ public class BLE_Connection implements Parcelable {
 
     public BluetoothGattCharacteristic getCharact(UUID uuid){
         for(BluetoothGattCharacteristic characteristic : selectedServ.getCharacteristics()){
-            if(characteristic.getUuid() == uuid){
+            if(characteristic.getUuid().toString().equals(uuid.toString())){
                 setSelectedChar(characteristic);
                 setSelectedCharacUUID(new ParcelUuid(uuid));
                 return characteristic;
@@ -118,7 +121,7 @@ public class BLE_Connection implements Parcelable {
         return null;
     }
 
-    public BluetoothGattCharacteristic getCharact(BluetoothGattService service, UUID uuid){
+    public BluetoothGattCharacteristic getCharact(@NonNull BluetoothGattService service, UUID uuid){
         for(BluetoothGattCharacteristic characteristic : service.getCharacteristics()){
             if(characteristic.getUuid() == uuid){
                 setSelectedChar(characteristic);
@@ -137,11 +140,18 @@ public class BLE_Connection implements Parcelable {
     }
 
     public boolean sendCommand(byte[] data){
-        selectedChar.setValue(data);
-        return btDevGatt.writeCharacteristic(selectedChar);
+        if(selectedChar == null){
+            getService(getSelectedServiceUUID().getUuid());
+            getCharact(getSelectedCharacUUID().getUuid());
+            selectedChar.setValue(data);
+            return btDevGatt.writeCharacteristic(selectedChar);
+        }else{
+            selectedChar.setValue(data);
+            return btDevGatt.writeCharacteristic(selectedChar);
+        }
     }
 
-    public boolean sendCommand(BluetoothGattCharacteristic characteristic, byte[] data){
+    public boolean sendCommand(@NonNull BluetoothGattCharacteristic characteristic, byte[] data){
         characteristic.setValue(data);
         return btDevGatt.writeCharacteristic(characteristic);
     }

@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (view.getId() == R.id.btnJos) {
             Toast.makeText(this, "Button Down Pressed", Toast.LENGTH_SHORT).show();
-
+            String command = new String("4");
+            byte[] bit = command.getBytes();
+            System.out.println(robotConnection.sendCommand(bit));
         }
     }
 
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         afisaj = findViewById(R.id.listBTDev);
         btStateUpdateReceiver = new BtBroadcastReceiver(getApplicationContext());
-        ble_scanner = new BLE_Scanner(this, 7500, -75);
+        ble_scanner = new BLE_Scanner(this, 10000, -50);
 
         btDevHashMap = new HashMap<>();
         btDevArrayList = new ArrayList<>();
