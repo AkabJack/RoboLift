@@ -13,7 +13,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class BLE_DevListAdapter extends ArrayAdapter<BLE_Device> {
-    Activity activity;//TODO Make them private
+    Activity activity;
     int layoutResId;
     ArrayList<BLE_Device> devices;
 

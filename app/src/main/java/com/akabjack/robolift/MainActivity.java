@@ -1,5 +1,5 @@
 package com.akabjack.robolift;
-
+//TODO buton de stop commanda si implement celorlalte butonae
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnSearch) {//TODO IF PRESSED THE APP REMAINS FROZEN
+        if (view.getId() == R.id.btnSearch) {
             if(!ble_scanner.isScanning()){startScan();}
             else{stopScan();}
         }
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btDevArrayList.add(ble_device);
         }
         else {
-            btDevHashMap.get(macAddress).setRssi(rssi);//TODO May produce NullPointer
+            btDevHashMap.get(macAddress).setRssi(rssi);
         }
         adapter.notifyDataSetChanged();
     }
