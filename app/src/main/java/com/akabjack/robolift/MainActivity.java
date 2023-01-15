@@ -71,10 +71,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             txtStatusCon.setText(robotConnection.isConectedCast());
         }
         else if (view.getId() == R.id.btnJos) {
-            Toast.makeText(this, "Button Down Pressed", Toast.LENGTH_SHORT).show();
-            String command = new String("4");
-            byte[] bit = command.getBytes();
-            System.out.println(robotConnection.sendCommand(bit));
+            //Toast.makeText(this, "Button Down Pressed", Toast.LENGTH_SHORT).show();
+            if(robotConnection != null){
+                String command = new String("1");
+                byte[] bit = command.getBytes();
+                System.out.println(robotConnection.sendCommand(bit));
+            }
+        }
+        else if(view.getId() == R.id.btnSus){
+            if(robotConnection != null){
+                String command = new String("2");
+                byte[] bit = command.getBytes();
+                System.out.println(robotConnection.sendCommand(bit));
+            }
+        }
+        else if(view.getId() == R.id.btnDreapta){
+            if(robotConnection != null){
+                String command = new String("3");
+                byte[] bit = command.getBytes();
+                System.out.println(robotConnection.sendCommand(bit));
+            }
+        }
+        else if(view.getId() == R.id.btnStanga){
+            if(robotConnection != null){
+                String command = new String("4");
+                byte[] bit = command.getBytes();
+                System.out.println(robotConnection.sendCommand(bit));
+            }
+        }
+        else if(view.getId() == R.id.btnDispenseCandy){
+            if(robotConnection != null){
+                String command = new String("5");
+                byte[] bit = command.getBytes();
+                System.out.println(robotConnection.sendCommand(bit));
+            }
         }
     }
 
@@ -111,14 +141,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtChar = (TextView) findViewById(R.id.txtChar);
         txtStatusCon = (TextView) findViewById(R.id.txtStatusCon);
         txtStatusCon.setText("Nu este conectat");
-        Button btnSearch = findViewById(R.id.btnSearch);
+
         Button btnControlJos = findViewById(R.id.btnJos);
+        Button btnControlSus = findViewById(R.id.btnSus);
+        Button btnControlDreapta = findViewById(R.id.btnDreapta);
+        Button btnControlStanga = findViewById(R.id.btnStanga);
+        Button btnCandy = findViewById(R.id.btnDispenseCandy);
+        Button btnSearch = findViewById(R.id.btnSearch);
         Button btnServiceSelect = findViewById(R.id.btnServiceSelect);
         Button btnConnRetrieve = findViewById(R.id.btnConnRetrieve);
         findViewById(R.id.btnJos).setOnClickListener(this);
+        findViewById(R.id.btnSus).setOnClickListener(this);
+        findViewById(R.id.btnDreapta).setOnClickListener(this);
+        findViewById(R.id.btnStanga).setOnClickListener(this);
+        findViewById(R.id.btnDispenseCandy).setOnClickListener(this);
         findViewById(R.id.btnSearch).setOnClickListener(this);
         findViewById(R.id.btnServiceSelect).setOnClickListener(this);
         findViewById(R.id.btnConnRetrieve).setOnClickListener(this);
+
         }
 
         @Override protected void onStart(){

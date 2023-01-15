@@ -24,7 +24,7 @@ public class BLE_DevListAdapter extends ArrayAdapter<BLE_Device> {
         this.devices = objects;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){//TODO Study
+    public View getView(int position, View convertView, ViewGroup parent){
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layoutResId, parent , false);
@@ -34,7 +34,7 @@ public class BLE_DevListAdapter extends ArrayAdapter<BLE_Device> {
         String address = device.getAddress();
         int rssi = device.getRssi();
 
-        TextView txtName = (TextView) convertView.findViewById(R.id.tv_name);//TODO Look at this;
+        TextView txtName = (TextView) convertView.findViewById(R.id.tv_name);
         if (name != null && name.length() >0){
             txtName.setText(device.getName());
         }
