@@ -99,9 +99,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println(robotConnection.sendCommand(bit));
             }
         }
-        else if(view.getId() == R.id.btnDispenseCandy){
-            if(robotConnection != null){
+        else if(view.getId() == R.id.btnDispenseCandy) {
+            if (robotConnection != null) {
                 String command = new String("5");
+                byte[] bit = command.getBytes();
+                System.out.println(robotConnection.sendCommand(bit));
+            }
+        }
+        else if(view.getId() == R.id.btnStopMovement){
+            if(robotConnection != null) {
+                String command = new String("7");
                 byte[] bit = command.getBytes();
                 System.out.println(robotConnection.sendCommand(bit));
             }
@@ -150,11 +157,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnSearch = findViewById(R.id.btnSearch);
         Button btnServiceSelect = findViewById(R.id.btnServiceSelect);
         Button btnConnRetrieve = findViewById(R.id.btnConnRetrieve);
+        Button btnStopMovement = findViewById(R.id.btnStopMovement);
         findViewById(R.id.btnJos).setOnClickListener(this);
         findViewById(R.id.btnSus).setOnClickListener(this);
         findViewById(R.id.btnDreapta).setOnClickListener(this);
         findViewById(R.id.btnStanga).setOnClickListener(this);
         findViewById(R.id.btnDispenseCandy).setOnClickListener(this);
+        findViewById(R.id.btnStopMovement).setOnClickListener(this);
         findViewById(R.id.btnSearch).setOnClickListener(this);
         findViewById(R.id.btnServiceSelect).setOnClickListener(this);
         findViewById(R.id.btnConnRetrieve).setOnClickListener(this);
