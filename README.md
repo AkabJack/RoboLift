@@ -1,3 +1,4 @@
+
 # RoboLift
 
 RoboLift este un robot creat pentru a ridica bomboane, sau diferite lucruri.
@@ -9,8 +10,9 @@ RoboLift este un robot creat pentru a ridica bomboane, sau diferite lucruri.
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
+![App Screenshot](https://github.com/AkabJack/RoboLift/blob/master/app.jpg?raw=true)  
+![Robot Screenshot](https://github.com/AkabJack/RoboLift/blob/master/robot.jpg?raw=false)  
+![Robot Blender File](https://github.com/AkabJack/RoboLift/blob/master/modelRobot.png?raw=false)  
 ## Piese utilizate
 
 - 2 Mini Breadboard
@@ -32,6 +34,7 @@ Modul de functionare: Aplicatia va cauta dispozitive de tip BLE pentru a se cone
 Cand sa ales serviciul necesar, aplicatia va indexa caracteristicele serviciului.
 Dupa ce sa ales caracteristica de scriere, aplicatia se va intoarce la ecranul principa, unde va trebui sa folosim butonul de "Connect".
 Cand sa conectat aplicatia la robot, ledul de notificare de pe modul va ramane aprins pe durata utilizari. Aplicatia suporta functia de autoconnect pana la iesirea din aplicatie.
+Codul pentru arduino este inclus in proiect.
 ### License
 
     MIT License
