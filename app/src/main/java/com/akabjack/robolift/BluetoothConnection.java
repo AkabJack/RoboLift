@@ -22,7 +22,7 @@ public class BluetoothConnection {
     private BluetoothManager bluetoothManager;
     private BluetoothLeScanner bluetoothScanner;
     private BluetoothAdapter bluetoothAdapter = null;
-    ArrayList<String> DevicesNames = new ArrayList<String>();
+    ArrayList<String> DevicesNames = new ArrayList<>();
     ScanCallback callBack;
 
     public void setCallBack(ScanCallback callBack) {
@@ -48,7 +48,7 @@ public class BluetoothConnection {
     }
     public void setBtAdapter(android.content.Context context){
         if (BluetoothAdapter.getDefaultAdapter() == null) {
-            Toast.makeText(context, "Nu suporta Bluetooth", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Nu suportă Bluetooth", Toast.LENGTH_SHORT).show();
         }
         else {
             this.bluetoothAdapter = bluetoothManager.getAdapter();
