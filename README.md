@@ -1,7 +1,7 @@
 
-# RoboLift
+# RoboLift / CandyBot
 
-RoboLift este un robot creat pentru a ridica bomboane, sau diferite lucruri.
+CandyBot este un robot creat pentru a ridica bomboane, sau diferite lucruri.
 
 ## Authors
 
